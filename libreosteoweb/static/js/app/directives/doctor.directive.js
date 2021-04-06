@@ -1,41 +1,4 @@
 
-/**
-    This file is part of LibreOsteo.
-
-    LibreOsteo is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    LibreOsteo is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
-*/
-var doctor = angular.module('loDoctor', ['ngResource']);
-
-
-doctor.factory('DoctorServ', ['$resource',
-    function ($resource) {
-        "use strict";
-        return $resource('api/doctors/:doctorId', null, {
-            query: {method: 'GET', isArray : true},
-            get : {method: 'GET', params: {doctorId: 'doctor'}},
-            save : {method : 'PUT'},
-            add : {method : 'POST'}
-        });
-    }
-]);
-
-
-doctor.controller('DoctorCtrl', ['$scope', '$routeParams', 'DoctorServ', function ($scope, $routeParams, DoctorServ) {
-    "use strict";
-    $scope.doctorDetails = DoctorServ.get({doctorId : $routeParams.doctorId});
-}]);
-
 var DoctorAddFormCtrl = function($scope, $uibModalInstance) {
     "use strict";
     $scope.doctor = {
@@ -46,7 +9,7 @@ var DoctorAddFormCtrl = function($scope, $uibModalInstance) {
 
     };
     $scope.ok = function () {
-      $uibModalInstance.close($scope.doctor);
+        $uibModalInstance.close($scope.doctor);
     };
 
     $scope.cancel = function () {
@@ -60,7 +23,9 @@ var DoctorAddFormCtrl = function($scope, $uibModalInstance) {
  * It will fill a field on an existing data structure with the selected doctor ID.
  * It uses a two-modes widget (editable-select) from angular-xeditable.
  */
-doctor.directive('doctorSelector', ['DoctorServ', function(DoctorServ) {
+angular
+    .module('loDoctor')
+    .directive('doctorSelector', ['DoctorServ', function(DoctorServ) {
     "use strict";
     return {
         restrict: 'E',
@@ -93,9 +58,9 @@ doctor.directive('doctorSelector', ['DoctorServ', function(DoctorServ) {
             $scope.$watch('doctorHolder.'+ $scope.doctorHolderProperty, function(newValue, oldValue){
                 if (newValue){
                     DoctorServ.get({doctorId: newValue}).
-                        $promise.then(function(result) {
-                            $scope.doctorDetails = result;
-                        });
+                    $promise.then(function(result) {
+                        $scope.doctorDetails = result;
+                    });
                 }
             });
 
