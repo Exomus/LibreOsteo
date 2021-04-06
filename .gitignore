@@ -41,3 +41,5 @@ yarn.lock
 output.xml
 /log.html
 /report.html
+
+libreosteoweb/static/components
